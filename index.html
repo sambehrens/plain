@@ -1,0 +1,198 @@
+<html>
+<head>
+	<title>Tenks</title>
+	<link rel="stylesheet" href="css/style.css">
+</head>
+    <canvas id="myCanvas" resize></canvas>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script type="text/javascript" src="js/paper-full.js"></script>
+    <script type="text/paperscript" canvas="myCanvas">
+
+
+var size = 10, numPlayers = 2, players = [], increment = 0, xStart = 0;
+
+size = Math.floor((Math.random() * 15) + 3);
+increment = Math.floor(window.innerHeight / (size));
+xStart = Math.floor((window.innerWidth - size * increment) / 2);
+
+var player1 = {
+    tank: new Raster(),
+    forward: false,
+    left: false,
+    right: false,
+    back: false
+}
+
+var boardMain = [];
+var verticalWalls = [];
+var horizontalWalls = [];
+
+
+function setup() {//           setup map here, also draw it
+    var x = xStart;
+    var y = 0;
+    for (var i = 0; i < size; i += 1) {
+        var row = [];
+        for (var ii = 0; ii < size; ii += 1) {
+
+
+            var rectangle = new Rectangle(new Point(x, y), new Size(increment, increment));
+            var cornerSize = new Size(10, 10);
+            var shape = new Shape.Rectangle(rectangle);
+
+            shape.fillColor = "#AAf34e";
+
+            var tileObject = {
+                path: shape,
+                remove: false,
+                checked: false,
+                comeback: true,
+                timeschecked: 0,
+                top: false,
+                bot: false,
+                left: false,
+                right: false,
+                leftedge: false,
+                rightedge: false,
+                topedge: false,
+                botedge: false
+            }
+
+            if (i === 0) {
+                tileObject.top = true;
+                tileObject.topedge = true;
+            } else if (i === size - 1) {
+                tileObject.bot = true;
+                tileObject.botedge = true;
+            }
+            if (ii === 0) {
+                tileObject.left = true;
+                tileObject.leftedge = true;
+            } else if (ii === size - 1) {
+                tileObject.right = true;
+                tileObject.rightedge = true;
+            }
+
+            row.push(tileObject);
+            x+=increment;
+        }
+        boardMain.push(row);
+        y+= increment;
+        x = xStart;
+    }
+
+    x = xStart + increment;
+    y = increment;
+    for (var i = 0; i < size; i += 1) {
+        var row = [];
+        for (var ii = 0; ii < size-1; ii += 1) {
+
+            if (Math.random() > 0.55) {
+                var from = new Point((ii + 1)* increment + xStart, i * increment);
+                var to = new Point((ii + 1) * increment + xStart, (i + 1) * increment);
+                var path = new Path.Line(from, to);
+                path.strokeColor = 'black';
+                path.strokeWidth = 10;
+
+                path.strokeCap = "square";
+
+                boardMain[i][ii].right = true;
+                boardMain[i][ii+1].left = true;
+
+                row.push(path);
+            }else {
+                row.push(0);
+            }
+            
+            x+=increment;
+        }
+        verticalWalls.push(row);
+        y+= increment;
+        x = xStart;
+    }
+
+    x = xStart + increment;
+    y = increment;
+    for (var i = 0; i < size -1; i += 1) {
+        var row = [];
+        for (var ii = 0; ii < size; ii += 1) {
+
+            if (Math.random() > 0.55) {
+                var from = new Point(ii* increment + xStart, (i + 1) * increment);
+                var to = new Point((ii + 1) * increment + xStart, (i + 1) * increment);
+                var path = new Path.Line(from, to);
+                path.strokeColor = 'black';
+                path.strokeWidth = 10;
+
+                path.strokeCap = "square";
+
+                boardMain[i][ii].bot = true;
+                boardMain[i+1][ii].top = true;
+
+                row.push(path);
+            } else {
+                row.push(0);
+            }
+            
+            x+=increment;
+        }
+        horizontalWalls.push(row);
+        y+= increment;
+        x = xStart;
+    }
+
+}
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF'.split('');
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function isNegative(number) { // check if number is negative
+    if (number > 0) {
+        return true;
+    } else if (number < 0) {
+        return false;
+    }
+}
+
+setup();
+
+function onFrame(event) { // runs 60 times per second TIP: Dont put a lot of loops in here because it will slow the game down a BUNCH
+
+}
+
+function onKeyDown(event) {
+
+}
+
+function onKeyUp(event) {
+
+}
+
+function onMouseMove(event) {
+
+}
+
+function onMouseDrag(event) {
+
+}
+
+function onMouseDown(event) {
+
+}
+
+function onMouseUp(event) {
+
+}
+
+
+
+
+    </script>
+</body>
+</html>
